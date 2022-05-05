@@ -1,76 +1,74 @@
 console.log("working");
 // imports
-// var express = require('express')
-// var app = express();
-// var http = require('http').Server(app);
-// var io = require('socket.io')(http);
-// var url = require('url');
+var express = require('express')
+var app = express();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+var url = require('url');
 
-// // local code
-// // var receive = require('./receive');
-
-// var port = 3000;
-// var hostname = '127.0.0.1';
-
-// var connection = null;
-
-// // stat managemen
-// var stat = {};
+// local code
+// var receive = require('./receive');
 
 
-// // general err handling
-// var throwErr = function(err, result){
-//     if (err) throw err;
-//     console.log(JSON.stringify(result, null, 2));
-// }
+var connection = null;
+
+// stat managemen
+var stat = {};
 
 
-// /*
-// * Express setup
-// */
+// general err handling
+var throwErr = function(err, result){
+    if (err) throw err;
+    console.log(JSON.stringify(result, null, 2));
+}
 
-// // use public folder for assets in html
-// app.use(express.static('public'));
 
-// // listen to requests
-// app.get('/', function(req, res){
-//   res.sendFile(__dirname + '/index.html');
-// });
+/*
+* Express setup
+*/
 
-// // connection listen
-// http.listen(3000, function(){
-//     // log after server start
-//     console.log('SERVER - Listening on *:3000');
-// });
+// use public folder for assets in html
+app.use(express.static('public'));
 
-// /*
-// * Websocket
-// */
+// listen to requests
+app.get('/', function(req, res){
+    res.sendFile(__dirname + '/index.html');
+});
 
-// // delete all items within table
-// // r.db('poker').table('games').delete().run();
+// connection listen
+http.listen(3000, function(){
+    // log after server start
+    console.log('SERVER - Listening on *:3000');
+});
 
-// io.on('connection', function(socket){
-//   console.log('a user connected');
+/*
+* Websocket
+*/
 
-// //   socket.on('disconnect', function(){
-// //     console.log('user disconnected');
-// //   });
+// delete all items within table
+// r.db('poker').table('games').delete().run();
 
-// //   socket.on('message', function(msg){
-// //       // add data
-// //       r.db('poker').table('games').insert([
-// //           {
-// //               message: msg
-// //           }
-// //       ]).run(connection, function(err, result) { throwErr(err, result) });
+io.on('connection', function(socket){
+  console.log('a user connected');
 
-// //       // run game logic after message and
-// //       // report back to the user message logged
+//   socket.on('disconnect', function(){
+//     console.log('user disconnected');
+//   });
 
-// //       var returnMsg = pokerLogic();
-// //       io.emit('message',returnMsg);
+//   socket.on('message', function(msg){
+//       // add data
+//       r.db('poker').table('games').insert([
+//           {
+//               message: msg
+//           }
+//       ]).run(connection, function(err, result) { throwErr(err, result) });
 
-// //       console.log('message: ' + msg);
-// //   });
-// });
+//       // run game logic after message and
+//       // report back to the user message logged
+
+//       var returnMsg = pokerLogic();
+//       io.emit('message',returnMsg);
+
+//       console.log('message: ' + msg);
+//   });
+});
