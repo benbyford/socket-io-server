@@ -4,6 +4,7 @@
   "description": "Battlemapp websockets test",
   "main": "app.js",
   "dependencies": {
+    "express": "^4.18.1",
     "socket.io": "^1.6.0"
   },
   "devDependencies": {
