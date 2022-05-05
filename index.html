@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Pokerbot Casino</title>
+
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+  </head>
+  <body>
+    <ul id="messages">
+        <li>type name</li>
+    </ul>
+    <form id="form" action="">
+      <input type="text" id="m" autocomplete="off">
+      <input type="submit" id="submit">
+    </form>
+
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io();
+      var name = '';
+
+      $('form').submit(function(e){
+
+          if(name){
+              var inputData = $('#m').val();
+              
+              socket.emit('message', inputData);
+              $('#m').val('');
+          }else{
+              name = $('#m').val();
+              $('#m').val('');
+              $('#messages').append($('<li>').text("Thank you you are now connected"));
+          }
+
+          e.preventDefault();
+      });
+
+      socket.on('message', function(msg){
+          $('#messages').append($('<li>').text(msg));
+      });
+    </script>
+  </body>
+</html>
