@@ -13,28 +13,28 @@ console.log("Finshed imports");
 // * Server setup
 // */
 
-// // Set up our server so it will listen on the port
-// port = 8080;
-// server.listen(port, function (error) {
-//     // Checking any error occur while listening on port
-//     if (error) {
-//         console.log('Something went wrong', error);
-//     }else {
-//         console.log('Server is listening on port ' + port);
-//     }
-// });
+// Set up our server so it will listen on the port
+port = 8080;
+server.listen(port, function (error) {
+    // Checking any error occur while listening on port
+    if (error) {
+        console.log('Something went wrong', error);
+    }else {
+        console.log('Server is listening on port ' + port);
+    }
+});
 
-// /*
-// * Express setup
-// */
-// app.use(express.static(__dirname + '/node_modules'));
-// app.use(express.static('public')); // use public folder for assets in html
-// app.use(cors());
+/*
+* Express setup
+*/
+app.use(express.static(__dirname + '/node_modules'));
+app.use(express.static('public')); // use public folder for assets in html
+app.use(cors());
 
-// // routes
-// app.get('/', function(req, res) {
-//     res.sendFile(__dirname + '/index.html');
-// });
+// routes
+app.get('/', function(req, res) {
+    res.sendFile(__dirname + '/index.html');
+});
 
 
 
