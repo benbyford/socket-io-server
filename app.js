@@ -14,7 +14,7 @@ console.log("Finshed imports");
 // */
 
 // Set up our server so it will listen on the port
-port = 8080;
+const port =  process.env.PORT || 8080;
 server.listen(port, function (error) {
     // Checking any error occur while listening on port
     if (error) {
