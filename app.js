@@ -1,6 +1,6 @@
 console.log("Starting up");
 
-const express = require('Express');
+const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
