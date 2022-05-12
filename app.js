@@ -29,7 +29,12 @@ server.listen(port, function (error) {
 */
 app.use(express.static(__dirname + '/node_modules'));
 app.use(express.static('public')); // use public folder for assets in html
-app.use(cors());
+app.use(cors(
+    {
+        "origin": "*",
+        "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+    }
+));
 
 // routes
 app.get('/', function(req, res) {
