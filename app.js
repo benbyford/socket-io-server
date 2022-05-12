@@ -62,13 +62,13 @@ const logAll = (arr, name = null) => {
     }
 }
 // // add user to room
-// const addRoom = id => {
-//     // check its a new room
-//     if(socketStat.rooms.indexOf(id) == -1) socketStat.rooms.push(id);
-// }
-// const addUser = id => {
-//     socketStat.peers.push(id);
-// }
+const addRoom = id => {
+    // check its a new room
+    if(socketStat.rooms.indexOf(id) == -1) socketStat.rooms.push(id);
+}
+const addUser = id => {
+    socketStat.peers.push(id);
+}
 // const removeUser = id => {
 //     socketStat.peers.pop(id);
 // }
