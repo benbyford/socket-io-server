@@ -75,13 +75,13 @@ app.get('/', function(req, res) {
 // */
 
 // // stat management
-// const socketStat = {};
+const socketStat = {};
 
-// socketStat.rooms = [];
-// socketStat.peers = [];
+socketStat.rooms = [];
+socketStat.peers = [];
 
-// io.on('connection', function(socket){
-//     console.log('a user connected');
+io.on('connection', function(socket){
+    console.log('a user connected');
 
 //     socket.on("join",(roomId) =>{
 //         socket.join(roomId);
@@ -105,7 +105,7 @@ app.get('/', function(req, res) {
 //         // add data
 //         socket.to(socket.data.room).emit("updates", msg)
 //     });    
-// });
+});
 
 // // todo
 // // track num users in rooms, remove rooms if empty
