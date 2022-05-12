@@ -19,7 +19,8 @@ console.log("Finshed imports");
 // */
 
 // Set up our server so it will listen on the port
-const port =  process.env.PORT || 8080;
+// const port =  process.env.PORT || 8080;
+const port =  8080;
 server.listen(port, function (error) {
     // Checking any error occur while listening on port
     if (error) {
@@ -34,12 +35,9 @@ server.listen(port, function (error) {
 */
 app.use(express.static(__dirname + '/node_modules'));
 app.use(express.static('public')); // use public folder for assets in html
-app.use(cors(
-    {
-        "origin": "*",
-        "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-    }
-));
+app.use(express.static('public/js')); // use public folder for assets in html
+// app.use(cors
+// );
 
 // routes
 app.get('/', function(req, res) {
