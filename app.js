@@ -53,16 +53,16 @@ app.get('/', function(req, res) {
 // */ 
 
 // // log something
-// const logAll = (arr, name = null) => {
-//     console.log("***");
-//     if(name) console.log(name);
+const logAll = (arr, name = null) => {
+    console.log("***");
+    if(name) console.log(name);
 
-//     if(arr.length){
-//         arr.forEach( (item) => {
-//             console.log(item);
-//         });
-//     }
-// }
+    if(arr.length){
+        arr.forEach( (item) => {
+            console.log(item);
+        });
+    }
+}
 // // add user to room
 // const addRoom = id => {
 //     // check its a new room
@@ -75,9 +75,9 @@ app.get('/', function(req, res) {
 //     socketStat.peers.pop(id);
 // }
 // // log all rooms
-// const showAllRooms = () => {
-//     logAll(socketStat.rooms, "Rooms")
-// }
+const showAllRooms = () => {
+    logAll(socketStat.rooms, "Rooms")
+}
 
 
 // /*
@@ -93,28 +93,29 @@ socketStat.peers = [];
 io.on('connection', function(socket){
     console.log('a user connected');
 
-//     socket.on("join",(roomId) =>{
-//         socket.join(roomId);
-//         socket.emit("joined", roomId);
-//         socket.data.room = roomId;
-
-//         addUser(socket.id);
-//         addRoom(roomId);
-
-//         showAll();
-//         showAllRooms();
+    socket.on("join",(roomId) =>{
         
-//         socket.to(roomId).emit("enter", "peer entered")
-//     });
+        socket.join(roomId);
+        socket.emit("joined", roomId);
+        socket.data.room = roomId;
 
-//     socket.on('disconnect', function(){
-//         console.log('user disconnected');
-//     });
+        addUser(socket.id);
+        addRoom(roomId);
 
-//     socket.on('messages', function(msg){
-//         // add data
-//         socket.to(socket.data.room).emit("updates", msg)
-//     });    
+        showAll();
+        showAllRooms();
+        
+        // socket.to(roomId).emit("enter", "peer entered")
+    });
+
+    socket.on('disconnect', function(){
+        console.log('user disconnected');
+    });
+
+    socket.on('messages', function(msg){
+        // add data
+        socket.to(socket.data.room).emit("updates", msg)
+    });    
 });
 
 // // todo
@@ -122,14 +123,14 @@ io.on('connection', function(socket){
 
 
 
-// async function showAll(){
-//     const sockets = await io.fetchSockets();
-//     console.log("***");
-//     console.log("num of users: ",sockets.length);
+async function showAll(){
+    const sockets = await io.fetchSockets();
+    console.log("***");
+    console.log("num of users: ",sockets.length);
 
-//     for (const socket of sockets) {
-//         console.log("id:",socket.id);
-//         console.log("rooms:",socket.rooms);
-//         console.log("data:",socket.data);
-//     }
-// }
+    for (const socket of sockets) {
+        console.log("id:",socket.id);
+        console.log("rooms:",socket.rooms);
+        console.log("data:",socket.data);
+    }
+}
