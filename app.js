@@ -74,7 +74,14 @@ const addUser = id => {
     socketStat.peers.push(id);
 }
 const removeUser = id => {
-    socketStat.peers.pop(id);
+    // remove user from peers array
+    const index = socketStat.peers.indexOf(id);
+    if (index > -1) socketStat.peers.splice(index, 1);
+}
+const removeAllData = () => {
+    logAll(["Tearing down rooms and peers"], "No users")
+    socketStat.peers.length = 0;
+    socketStat.rooms.length = 0;
 }
 
 // log all rooms
@@ -96,6 +103,11 @@ async function showAllSockets(){
         console.log("rooms:",socket.rooms);
         console.log("data:",socket.data);
     }
+}
+
+const testPeers = () => {
+    // delete rooms if none being used
+    if(socketStat.peers.length = 0) removeAllData();
 }
 
 
@@ -130,7 +142,8 @@ io.on('connection', function(socket){
     });
 
     socket.on('disconnect', function(){
-        removeUser(socket.id)
+        removeUser(socket.id);
+        testPeers();
         console.log('user disconnected');
     });
 
