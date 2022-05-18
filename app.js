@@ -107,7 +107,7 @@ async function showAllSockets(){
 
 const testPeers = () => {
     // delete rooms if none being used
-    if(socketStat.peers.length = 0) removeAllData();
+    if(socketStat.peers.length == 0) removeAllData();
 }
 
 
