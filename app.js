@@ -36,8 +36,6 @@ server.listen(port, function (error) {
 app.use(express.static(__dirname + '/node_modules'));
 app.use(express.static('public')); // use public folder for assets in html
 app.use(express.static('public/js')); // use public folder for assets in html
-// app.use(cors
-// );
 
 // routes
 app.get('/', function(req, res) {
@@ -56,39 +54,64 @@ const logAll = (arr, name = null) => {
     if(name) console.log(name);
 
     if(arr.length){
-        arr.forEach( (item) => {
+        arr.forEach( item => {
             console.log(item);
         });
     }
 }
-// // add user to room
+// add user to room
 const addRoom = id => {
     // check its a new room
     if(socketStat.rooms.indexOf(id) == -1) socketStat.rooms.push(id);
 }
+// remove room
+const removeRoom = id => {
+    // get room index and remove
+    const index = socketStat.rooms.indexOf(id);
+    if (index > -1) socketStat.rooms.splice(index, 1);
+}
 const addUser = id => {
     socketStat.peers.push(id);
 }
-// const removeUser = id => {
-//     socketStat.peers.pop(id);
-// }
-// // log all rooms
+const removeUser = id => {
+    socketStat.peers.pop(id);
+}
+
+// log all rooms
 const showAllRooms = () => {
     logAll(socketStat.rooms, "Rooms")
 }
+// log all rooms
+const showAllPeers = () => {
+    logAll(socketStat.peers, "Peers")
+}
+
+async function showAllSockets(){
+    const sockets = await io.fetchSockets();
+    console.log("***");
+    console.log("num of users: ",sockets.length);
+
+    for (const socket of sockets) {
+        console.log("id:",socket.id);
+        console.log("rooms:",socket.rooms);
+        console.log("data:",socket.data);
+    }
+}
 
 
-// /*
-// * Socket stuff
-// */
+/*
+* Socket stuff
+*/
 
-// // stat management
+// stat management
 const socketStat = {};
 
 socketStat.rooms = [];
 socketStat.peers = [];
 
 io.on('connection', function(socket){
+    
+    // new connect
     console.log('a user connected');
 
     socket.on("join",(roomId) =>{
@@ -100,35 +123,22 @@ io.on('connection', function(socket){
         addUser(socket.id);
         addRoom(roomId);
 
-        showAll();
+        showAllPeers();
         showAllRooms();
         
-        // socket.to(roomId).emit("enter", "peer entered")
+        socket.to(roomId).emit("peerEnter", "New peer entered")
     });
 
     socket.on('disconnect', function(){
+        removeUser(socket.id)
         console.log('user disconnected');
     });
 
     socket.on('messages', function(msg){
-        // add data
+        // send send to room but not self
         socket.to(socket.data.room).emit("updates", msg)
     });    
 });
 
-// // todo
-// // track num users in rooms, remove rooms if empty
-
-
-
-async function showAll(){
-    const sockets = await io.fetchSockets();
-    console.log("***");
-    console.log("num of users: ",sockets.length);
-
-    for (const socket of sockets) {
-        console.log("id:",socket.id);
-        console.log("rooms:",socket.rooms);
-        console.log("data:",socket.data);
-    }
-}
+// todo
+// track num users in rooms, remove rooms if empty
