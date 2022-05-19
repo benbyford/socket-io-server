@@ -110,6 +110,19 @@ const testPeers = () => {
     if(socketStat.peers.length == 0) removeAllData();
 }
 
+const addUserToRoom = (id, roomId) =>{
+    addUser(id);
+    addRoom(roomId);
+
+    if(!socketStat.roomData.hasOwnProperty(roomId)){
+        socketStat.roomData[roomId] = {
+            peers: 1
+        }
+    }else{
+        socketStat.roomData[roomId].peers++;
+    }
+}
+
 
 /*
 * Socket stuff
@@ -119,6 +132,7 @@ const testPeers = () => {
 const socketStat = {};
 
 socketStat.rooms = [];
+socketStat.roomData = {};
 socketStat.peers = [];
 
 io.on('connection', function(socket){
@@ -132,19 +146,20 @@ io.on('connection', function(socket){
         socket.emit("joined", roomId);
         socket.data.room = roomId;
 
-        addUser(socket.id);
-        addRoom(roomId);
+        addUserToRoom(socket.id, roomId);
 
         showAllPeers();
         showAllRooms();
         
-        socket.to(roomId).emit("peerEnter", "New peer entered")
+        socket.to(roomId).emit("peerEnter", "");
     });
 
     socket.on('disconnect', function(){
-        removeUser(socket.id);
-        testPeers();
         console.log('user disconnected');
+        
+        removeUser(socket.id);
+        
+        testPeers();
     });
 
     socket.on('messages', function(msg){
