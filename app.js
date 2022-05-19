@@ -111,13 +111,13 @@ const testPeers = () => {
 }
 
 const addUserToRoom = (id, roomId) =>{
+    
     addUser(id);
     addRoom(roomId);
 
     if(!socketStat.roomData.hasOwnProperty(roomId)){
-        socketStat.roomData[roomId] = {
-            peers: 1
-        }
+        socketStat.roomData[roomId] = {}
+        socketStat.roomData[roomId].peers = 1;
     }else{
         socketStat.roomData[roomId].peers++;
     }
@@ -151,7 +151,7 @@ io.on('connection', function(socket){
         showAllPeers();
         showAllRooms();
         
-        socket.to(roomId).emit("peerEnter", "");
+        socket.to(roomId).emit("peerEnter", socketStat.roomData[roomId].peers);
     });
 
     socket.on('disconnect', function(){
