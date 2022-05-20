@@ -79,7 +79,7 @@ const removeUser = user => {
     if (index > -1) socketStat.peers.splice(index, 1);
 
     // decrement user from peers in room
-    if(socketStat.roomData.hasOwnProperty(user.data.room)) socketStat.roomData[roomId].peers--;
+    if(socketStat.roomData.hasOwnProperty(user.data.room)) socketStat.roomData[user.data.room].peers--;
 }
 const removeAllData = () => {
     logAll(["Tearing down rooms and peers"], "No users")
