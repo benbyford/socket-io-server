@@ -70,6 +70,7 @@ const removeRoom = id => {
     const index = socketStat.rooms.indexOf(id);
     if (index > -1) socketStat.rooms.splice(index, 1);
 }
+
 const addUser = id => {
     socketStat.peers.push(id);
 }
@@ -154,7 +155,9 @@ io.on('connection', function(socket){
         showAllPeers();
         showAllRooms();
         
+        // emit peer number to both peer and room
         socket.to(roomId).emit("peerEnter", socketStat.roomData[roomId].peers);
+        socket.emit("peerEnter", socketStat.roomData[roomId].peers);
     });
 
     socket.on('disconnect', function(){
