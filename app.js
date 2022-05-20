@@ -73,10 +73,13 @@ const removeRoom = id => {
 const addUser = id => {
     socketStat.peers.push(id);
 }
-const removeUser = id => {
+const removeUser = user => {
     // remove user from peers array
-    const index = socketStat.peers.indexOf(id);
+    const index = socketStat.peers.indexOf(user.id);
     if (index > -1) socketStat.peers.splice(index, 1);
+
+    // decrement user from peers in room
+    if(socketStat.roomData.hasOwnProperty(user.data.room)) socketStat.roomData[roomId].peers--;
 }
 const removeAllData = () => {
     logAll(["Tearing down rooms and peers"], "No users")
@@ -157,7 +160,7 @@ io.on('connection', function(socket){
     socket.on('disconnect', function(){
         console.log('user disconnected');
         
-        removeUser(socket.id);
+        removeUser(socket);
         
         testPeers();
     });
