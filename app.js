@@ -171,7 +171,7 @@ io.on('connection', function(socket){
 
     socket.on('messages', function(msg){
         // send send to room but not self
-        appData.roomData[roomId].data = msg;
+        appData.roomData[socket.data.room].data = msg;
         console.log(msg);
 
         socket.to(socket.data.room).emit("updates", msg);
