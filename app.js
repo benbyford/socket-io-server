@@ -162,7 +162,7 @@ io.on('connection', function(socket){
         // emit to self
         // peer number and room data
         socket.emit("peerEnter", appData.roomData[roomId].peers);
-        if(appData.roomData[socket.data.room]?.data) socket.emit("updates", appData.roomData[socket.data.room].data);
+        if(appData.roomData[socket.data.room].data !== undefined) socket.emit("updates", appData.roomData[socket.data.room].data);
     });
 
     socket.on('disconnect', function(){
