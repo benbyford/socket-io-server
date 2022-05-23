@@ -156,9 +156,13 @@ io.on('connection', function(socket){
         showAllPeers();
         showAllRooms();
         
-        // emit peer number to both peer and room
+        // emit peer number to both room
         socket.to(roomId).emit("peerEnter", appData.roomData[roomId].peers);
+        
+        // emit to self
+        // peer number and room data
         socket.emit("peerEnter", appData.roomData[roomId].peers);
+        if(appData.roomData[socket.data.room]?.data) socket.emit("updates", appData.roomData[socket.data.room].data);
     });
 
     socket.on('disconnect', function(){
