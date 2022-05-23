@@ -62,39 +62,39 @@ const logAll = (arr, name = null) => {
 // add user to room
 const addRoom = id => {
     // check its a new room
-    if(socketStat.rooms.indexOf(id) == -1) socketStat.rooms.push(id);
+    if(appData.rooms.indexOf(id) == -1) appData.rooms.push(id);
 }
 // remove room
 const removeRoom = id => {
     // get room index and remove
-    const index = socketStat.rooms.indexOf(id);
-    if (index > -1) socketStat.rooms.splice(index, 1);
+    const index = appData.rooms.indexOf(id);
+    if (index > -1) appData.rooms.splice(index, 1);
 }
 
 const addUser = id => {
-    socketStat.peers.push(id);
+    appData.peers.push(id);
 }
 const removeUser = user => {
     // remove user from peers array
-    const index = socketStat.peers.indexOf(user.id);
-    if (index > -1) socketStat.peers.splice(index, 1);
+    const index = appData.peers.indexOf(user.id);
+    if (index > -1) appData.peers.splice(index, 1);
 
     // decrement user from peers in room
-    if(socketStat.roomData.hasOwnProperty(user.data.room)) socketStat.roomData[user.data.room].peers--;
+    if(appData.roomData.hasOwnProperty(user.data.room)) appData.roomData[user.data.room].peers--;
 }
 const removeAllData = () => {
     logAll(["Tearing down rooms and peers"], "No users")
-    socketStat.peers.length = 0;
-    socketStat.rooms.length = 0;
+    appData.peers.length = 0;
+    appData.rooms.length = 0;
 }
 
 // log all rooms
 const showAllRooms = () => {
-    logAll(socketStat.rooms, "Rooms")
+    logAll(appData.rooms, "Rooms")
 }
 // log all rooms
 const showAllPeers = () => {
-    logAll(socketStat.peers, "Peers")
+    logAll(appData.peers, "Peers")
 }
 
 async function showAllSockets(){
@@ -107,11 +107,12 @@ async function showAllSockets(){
         console.log("rooms:",socket.rooms);
         console.log("data:",socket.data);
     }
+    console.log("---");
 }
 
 const testPeers = () => {
     // delete rooms if none being used
-    if(socketStat.peers.length == 0) removeAllData();
+    if(appData.peers.length == 0) removeAllData();
 }
 
 const addUserToRoom = (id, roomId) =>{
@@ -119,11 +120,11 @@ const addUserToRoom = (id, roomId) =>{
     addUser(id);
     addRoom(roomId);
 
-    if(!socketStat.roomData.hasOwnProperty(roomId)){
-        socketStat.roomData[roomId] = {}
-        socketStat.roomData[roomId].peers = 1;
+    if(!appData.roomData.hasOwnProperty(roomId)){
+        appData.roomData[roomId] = {}
+        appData.roomData[roomId].peers = 1;
     }else{
-        socketStat.roomData[roomId].peers++;
+        appData.roomData[roomId].peers++;
     }
 }
 
@@ -133,11 +134,11 @@ const addUserToRoom = (id, roomId) =>{
 */
 
 // stat management
-const socketStat = {};
+const appData = {};
 
-socketStat.rooms = [];
-socketStat.roomData = {};
-socketStat.peers = [];
+appData.rooms = [];
+appData.roomData = {};
+appData.peers = [];
 
 io.on('connection', function(socket){
     
@@ -156,8 +157,8 @@ io.on('connection', function(socket){
         showAllRooms();
         
         // emit peer number to both peer and room
-        socket.to(roomId).emit("peerEnter", socketStat.roomData[roomId].peers);
-        socket.emit("peerEnter", socketStat.roomData[roomId].peers);
+        socket.to(roomId).emit("peerEnter", appData.roomData[roomId].peers);
+        socket.emit("peerEnter", appData.roomData[roomId].peers);
     });
 
     socket.on('disconnect', function(){
@@ -170,7 +171,10 @@ io.on('connection', function(socket){
 
     socket.on('messages', function(msg){
         // send send to room but not self
-        socket.to(socket.data.room).emit("updates", msg)
+        appData.roomData[roomId].data = msg;
+        console.log(msg);
+
+        socket.to(socket.data.room).emit("updates", msg);
     });    
 });
 
